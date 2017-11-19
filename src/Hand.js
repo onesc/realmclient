@@ -19,13 +19,9 @@ class Card extends Component {
 		return (
 			<View className="card">
 				<Text className="name">{name}</Text><Text className="cost">{cost}</Text>
-				<Image className="image"  style={{width: 50, height: 50}}  source={require('./monster-fat-horror.jpg')}/>
+				<Image className="image" style={{width: "100%", height: "40%"}}  source={require('./monster-fat-horror.jpg')}/>
 				<Text className="type">{type}</Text><Text className="text">{text}</Text>
 				<Text className="power">1</Text><Text className="toughness">{toughness}</Text>
-				<Image
-          style={{width: 50, height: 50}}
-          source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
-        />
 			</View>
 		)
 	}
@@ -39,53 +35,30 @@ export default class Hand extends Component<{}> {
   render() {
   	const cards = this.props.cards;
 
-    return (
-      <View style={styles.container}>
-        <FlatList
-		  data={cards}
-		  renderItem={({item}) => <Card data={item}/>}
-		/>
-      </View>
-    );
+	const cardsList = cards.map(card => {
+		return <Card style={styles.card} data={card}/>;
+	})
+
+    return cardsList;
   }
 }
 
+const styles = StyleSheet.create(
+  {
+    hand: {
+      flex: 1,
+      padding: 8,
+      flexDirection: 'row', // main axis
+      justifyContent: 'center', // main axis
+      alignItems: 'center', // cross axis
+    },
+    card: {
+    	width: 50,
+    	height: 90
+    }
+  });
+
 Hand.defaultProps = {
-	cards: [{
-    cost:2,
-    id:120,
-    imageSrc:"http://jdillustration.jimmsdesign.co.uk/images/full-scale-image/monster-fat-horror.jpg",
-    name:"Obese Horror",
-    power: 1,
-    text: "",
-    toughness: 7,
-    type: "Creature"
-  }, {
-    cost:2,
-    id:120,
-    imageSrc:"http://jdillustration.jimmsdesign.co.uk/images/full-scale-image/monster-fat-horror.jpg",
-    name:"Obese Horror",
-    power: 1,
-    text: "",
-    toughness: 7,
-    type: "Creature",
-  }, {
-    cost:2,
-    id:120,
-    imageSrc:"http://jdillustration.jimmsdesign.co.uk/images/full-scale-image/monster-fat-horror.jpg",
-    name:"Obese Horror",
-    power: 1,
-    text: "",
-    toughness: 7,
-    type: "Creature",
-  }]
+	cards: []
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  }
-});
