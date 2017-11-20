@@ -7,13 +7,15 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList
+  FlatList,
 } from 'react-native';
 
-export default class App extends Component<{}> {
+
+export default class App extends Component {
   constructor(props) {
     super(props);
-    this.socket = SocketIOClient('http://localhost:3000');
+    this.socket = SocketIOClient('http://ec2-54-206-127-123.ap-southeast-2.compute.amazonaws.com:8080/');
+
     this.socket.emit("enterPlayer");
 
     this.state = {
@@ -29,9 +31,9 @@ export default class App extends Component<{}> {
   render() {
     const game = this.state.game;
 
-
     return (
       <View style={styles.container}>
+          <Text> Hello Noobs </Text>
           <Hand cards = {game.players[0].hand}/>
       </View>
     );
@@ -45,9 +47,6 @@ const styles = StyleSheet.create({
     width: "100%",
   }
 });
-
-
-
 
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' +
