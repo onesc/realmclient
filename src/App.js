@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, FlatList } from 'react-native';
+import { Platform, StyleSheet, Text, View, FlatList, Button } from 'react-native';
 import SocketIOClient from 'socket.io-client';
-import Hand from './Hand';
+import Game from './Game';
 
 export default class App extends Component {
 	constructor(props) {
@@ -11,24 +11,27 @@ export default class App extends Component {
 		this.socket.emit("enterPlayer");
 
 		this.state = {
-			game: {players: [{name: "Johnny", hand: []}, {name: "Catherine"}]}  
+			gameStarted: false
 		};
 
 		this.socket.on('state', game => {
-			this.setState({game: JSON.parse(game)});
-			console.log(this.state.gam=e)
+			this.setState({game: JSON.parse(game), gameStarted: true});
+			console.log(this.state.game);
 		});
 	}
 
-	render() { 
-		const game = this.state.game;
-
-		return (
-			<View style={styles.container}>
-				<Text> Hello Noobs </Text>
-				<Hand cards = {game.players[0].hand}/>
-			</View>
-		);
+	render() {
+		if (this.state.gameStarted) {
+			return (
+				<Game game={this.state.game} socket={this.socket} />
+			);
+		} else {
+			return (
+				<View style={styles.container}>
+					<Text> Waiting for game to start... </Text>
+				</View>
+			);
+		};		
 	}
 }
 
@@ -37,6 +40,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		width: "100%",
+	},
+	nextPhase: {
+		position: "absolute",
+		bottom: 200,
+		right: 0
 	}
 });
 
