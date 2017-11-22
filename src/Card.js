@@ -44,10 +44,9 @@ export default class Card extends Component {
 				} 
 				
 				this.state.pan.setValue({x: 0, y: 0});
-				this.setState({hovered: false, inZone: false});
-					
+				this.setState({hovered: false, inZone: false});		
 			}
-		});
+		})
 	}
 
 	render() {
@@ -77,7 +76,7 @@ export default class Card extends Component {
 		return (
   			<Animated.View {...this._panResponder.panHandlers} style={[style]} className="card">
   				<Text className="name">{name}</Text><Text className="cost">{cost}</Text>
-  				<Image className="image" style={{width: cardWidth, height: 70}}  source={require('./images/horror.jpg')}/>
+  				<Image className="image" style={{width: cardWidth, height: 70}}  source={{uri: imageSrc}}/>
   				<Text className="type">{type}</Text><Text className="text">Bones</Text>
   				<Text className="power">1</Text><Text className="toughness">{toughness}</Text>
         	</Animated.View>
