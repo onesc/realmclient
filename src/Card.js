@@ -5,7 +5,7 @@ const { height, width } = Dimensions.get('window');
 export default class Card extends Component {
 	constructor(props) {
 		super(props)
-    	this.state = { pan: new Animated.ValueXY(), hovered: false };
+    	this.state = { pan: new Animated.ValueXY(), hovered: false, inZone: false };
 	}
 
 	componentWillMount = () => {
@@ -20,27 +20,54 @@ export default class Card extends Component {
 
 			onPanResponderMove: Animated.event([
 				null, {dx: this.state.pan.x, dy: this.state.pan.y},
-			]),
+			], {
+				listener: (e, gestureState) => {
+					if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
+						this.setState({inZone: true});
+					} else if (gestureState.moveX > 150 && gestureState.moveX < 230 && gestureState.moveY > 220 && gestureState.moveY < 320) {
+						this.setState({inZone: true});
+					} else if (gestureState.moveX > 260 && gestureState.moveX < 330 && gestureState.moveY > 220 && gestureState.moveY < 320) {
+						this.setState({inZone: true});
+					} else {
+						this.setState({inZone: false});
+					}
+				}
+			}),
 
-			onPanResponderRelease: (e, {vx, vy}) => {
+			onPanResponderRelease: (e, gestureState) => {
+				if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
+					this.props.socket.emit('playCard', this.props.data.id, "attack")
+				} else if (gestureState.moveX > 150 && gestureState.moveX < 230 && gestureState.moveY > 220 && gestureState.moveY < 320) {
+					this.props.socket.emit('playCard', this.props.data.id, "defend")
+				} else if (gestureState.moveX > 260 && gestureState.moveX < 330 && gestureState.moveY > 220 && gestureState.moveY < 320) {
+					this.props.socket.emit('playCard', this.props.data.id, "support")
+				} 
+				
 				this.state.pan.setValue({x: 0, y: 0});
-				this.setState({hovered: false});
+				this.setState({hovered: false, inZone: false});
+					
 			}
 		});
 	}
 
 	render() {
 		const { name, cost, imageSrc, type, text, power, toughness} = this.props.data;
-	    const { pan, hovered } = this.state;
+	    const { pan, hovered, inZone } = this.state;
 	    const [translateX, translateY] = [pan.x, pan.y];
 
 	    let cardWidth = width / this.props.amount;
+	    let cardHeight = 200
 
-	    if (hovered) { cardWidth = cardWidth * 2 }; 
+	    if (hovered) { cardWidth = cardWidth * 1.5 };
+
+	    if (inZone) { 
+	    	cardWidth = 50;
+	    	cardHeight = 60
+	    }
 
 	    const style = {
 			backgroundColor: "white",
-			height: 200,
+			height: cardHeight,
 			borderWidth: 2,
 			borderColor: "black",
 			width: cardWidth,

@@ -60,7 +60,7 @@ export default class Game extends Component {
 					/>
 				</View>
 			
-				<Hand cards = {game.players[0].hand}/>
+				<Hand cards={me.hand} socket={this.props.socket}/>
 			</View>
 		);
 	}

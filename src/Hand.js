@@ -10,9 +10,9 @@ export default class Hand extends Component {
 	}
 
 	render() {
-		const { cards } = this.props;
-		
-		const cardsList = cards.map(card => <Card data={card} amount={cards.length}/>);
+		const { cards, socket } = this.props;
+
+		const cardsList = cards.map(card => <Card data={card} amount={cards.length} socket={socket}/>);
 
 		return (<View style={styles.hand}>{cardsList}</View>);
   	}
