@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, Dimensions} from 'react-native';
 import Card from './Card'
 
 const { height, width } = Dimensions.get('window');

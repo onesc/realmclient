@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, Dimensions, TouchableWithoutFeedback, PanResponder, Animated } from 'react-native';
+import { StyleSheet, Text, Image, Dimensions, PanResponder, Animated } from 'react-native';
 import getImagePath from './imagesrcmap'
 const { height, width } = Dimensions.get('window');
 

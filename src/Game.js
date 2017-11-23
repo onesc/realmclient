@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View, FlatList, Button, Image } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import Hand from './Hand';
+import BoardSlot from './BoardSlot'
 
 export default class Game extends Component {
 	constructor(props) {
@@ -9,9 +10,9 @@ export default class Game extends Component {
 	}
 
 	render() { 
-		const nextPhase = () => { this.props.socket.emit("nextPhase") }
-		const { game } = this.props;
-		const me = game.players.find(p => p.id === this.props.socket.id)
+		const { game, socket } = this.props;
+		const nextPhase = () => { socket.emit("nextPhase") }
+		const me = game.players.find(p => p.id === socket.id)
 		const opponent = game.players.find(p => p.id !== me.id)
 
 		return (
@@ -22,29 +23,17 @@ export default class Game extends Component {
 					<Text style={{position: 'absolute', left: 60, top: 50, color: "blue"}}>{opponent.currentMana}</Text>
 				</View>
 
-				<View style={{position: 'absolute', left: 30, top: 120}}> 
-	  				<Image style={{position: 'absolute', width: 80, height: 80}} source={require('./images/bow.png')}/>
-				</View>
+				<BoardSlot isTarget={me.target && opponent.board.attack && me.target.id === opponent.board.attack.id} socket={socket} position="Attack" side="opponent" card={opponent.board.attack}/>
 
-				<View style={{position: 'absolute', left: 140, top: 120}}> 
-	  				<Image style={{position: 'absolute', width: 80, height: 80}} source={require('./images/shield.png')}/>
-				</View>
+				<BoardSlot isTarget={me.target && opponent.board.defend && me.target.id === opponent.board.defend.id} socket={socket} position="Defend" side="opponent" card={opponent.board.defend}/>
 
-				<View style={{position: 'absolute', left: 240, top: 120}}> 
-	  				<Image style={{position: 'absolute', width: 80, height: 80}} source={require('./images/circle.jpg')}/>
-				</View>
+				<BoardSlot isTarget={me.target && opponent.board.support && me.target.id === opponent.board.support.id} socket={socket} position="Support" side="opponent" card={opponent.board.support}/>
 
-				<View style={{position: 'absolute', left: 30, top: 250}}> 
-	  				<Image style={{position: 'absolute', width: 80, height: 80}} source={require('./images/bow.png')}/>
-				</View>
+				<BoardSlot socket={socket} position="Attack" side="player" card={me.board.attack}/>
 
-				<View style={{position: 'absolute', left: 140, top: 250}}> 
-	  				<Image style={{position: 'absolute', width: 80, height: 80}} source={require('./images/shield.png')}/>
-				</View>
+				<BoardSlot socket={socket} position="Defend" side="player" card={me.board.defend}/>
 
-				<View style={{position: 'absolute', left: 240, top: 250}}> 
-	  				<Image style={{position: 'absolute', width: 80, height: 80}} source={require('./images/circle.jpg')}/>
-				</View>
+				<BoardSlot socket={socket} position="Support" side="player" card={me.board.support}/>
 
 				<View style={{position: 'absolute', left: 130, top: 340}}> 
 	  				<Image style={{position: 'absolute', width: 100, height: 100}} source={require('./images/crown.png')}/>
@@ -60,7 +49,7 @@ export default class Game extends Component {
 					/>
 				</View>
 			
-				<Hand cards={me.hand} socket={this.props.socket}/>
+				<Hand cards={me.hand} socket={socket}/>
 			</View>
 		);
 	}
@@ -78,10 +67,3 @@ const styles = StyleSheet.create({
 		right: 0
 	}
 });
-
-// const instructions = Platform.select({
-//   ios: 'Press Cmd+R to reload,\n' +
-//     'Cmd+D or shake for dev menu',
-//   android: 'Double tap R on your keyboard to reload,\n' +
-//     'Shake or press menu button for dev menu',
-// });
