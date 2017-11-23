@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, Dimensions, TouchableWithoutFeedback, PanResponder, Animated } from 'react-native';
+import getImagePath from './imagesrcmap'
 const { height, width } = Dimensions.get('window');
 
 export default class Card extends Component {
@@ -73,10 +74,12 @@ export default class Card extends Component {
 			transform: [{translateX}, {translateY}]
 	    };
 
+	    const imagePath = getImagePath(name);
+
 		return (
   			<Animated.View {...this._panResponder.panHandlers} style={[style]} className="card">
   				<Text className="name">{name}</Text><Text className="cost">{cost}</Text>
-  				<Image className="image" style={{width: cardWidth, height: 70}}  source={{uri: imageSrc}}/>
+  				<Image className="image" style={{width: cardWidth, height: 70}}  source={imagePath}/>
   				<Text className="type">{type}</Text><Text className="text">Bones</Text>
   				<Text className="power">1</Text><Text className="toughness">{toughness}</Text>
         	</Animated.View>
