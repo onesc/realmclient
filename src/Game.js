@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, FlatList, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import Hand from './Hand';
 import BoardSlot from './BoardSlot'
@@ -41,13 +41,15 @@ export default class Game extends Component {
 					<Text style={{position: 'absolute', left: 60, top: 50, color: "blue"}}> {me.currentMana}</Text>
 				</View>
 
-				<View style={styles.nextPhase} > 
-					<Button
-					  onPress={nextPhase}
-					  title="Next Phase"
-					  color="#841584"
-					/>
-				</View>
+				{game.currentPlayer.id === me.id && 
+					<View style={styles.nextPhase}> 
+						<Button
+						  onPress={nextPhase}
+						  title="Next Phase"
+						  color="#841584"
+						/>
+					</View>
+				}
 			
 				<Hand cards={me.hand} socket={socket}/>
 			</View>
