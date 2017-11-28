@@ -9,16 +9,20 @@ export default class Hand extends Component {
 		super(props);
 	}
 
+	static defaultProps = {
+		cards: []
+	}
+
 	render() {
 		const { cards, socket } = this.props;
 
 		const cardsList = cards.map(card => <Card data={card} amount={cards.length} socket={socket}/>);
 
-		return (<View style={styles.hand}>{cardsList}</View>);
+		return (<View style={ style }>{cardsList}</View>);
   	}
 }
 
-const styles = StyleSheet.create({
+const { hand: style } = StyleSheet.create({
 	hand: {
 		flex: 1,
 		flexDirection: 'row',
@@ -27,8 +31,3 @@ const styles = StyleSheet.create({
 		top: height - 200, 
 	}
 });
-
-Hand.defaultProps = {
-	cards: []
-};
-

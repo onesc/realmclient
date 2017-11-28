@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-native';
 import getImagePath from './imagesrcmap'
 
-export default class BoardSlot extends Component {
+export default class BoardSlot extends PureComponent {
 	constructor(props) {
 		super(props);
 	}

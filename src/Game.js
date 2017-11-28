@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import Hand from './Hand';
 import BoardSlot from './BoardSlot'
+import Alert from './Alert';
 
 export default class Game extends Component {
 	constructor(props) {
@@ -52,6 +53,8 @@ export default class Game extends Component {
 				}
 			
 				<Hand cards={me.hand} socket={socket}/>
+
+				<Alert message={opponent.hp}/>
 			</View>
 		);
 	}
