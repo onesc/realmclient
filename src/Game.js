@@ -25,17 +25,38 @@ export default class Game extends Component {
 					<Text style={{position: 'absolute', left: 60, top: 50, color: "blue"}}>{opponent.currentMana}</Text>
 				</View>
 
-				<BoardSlot isTarget={me.target && opponent.board.attack && me.target.id === opponent.board.attack.id} socket={socket} position="Attack" side="opponent" card={opponent.board.attack}/>
+				<BoardSlot 
+				  style={{top: 120, left: 30, position: 'absolute', width: 90, height: 90}} 
+				  positionImagePath={require('./images/bow.png')}
+				  isTarget={me.target && opponent.board.attack && me.target.id === opponent.board.attack.id} 
+				  socket={socket} card={opponent.board.attack} />
 
-				<BoardSlot isTarget={me.target && opponent.board.defend && me.target.id === opponent.board.defend.id} socket={socket} position="Defend" side="opponent" card={opponent.board.defend}/>
+				<BoardSlot 
+				  style={{top: 120, left: 130, position: 'absolute', width: 90, height: 90}} 
+				  positionImagePath={require('./images/shield.png')}
+				  isTarget={me.target && opponent.board.defend && me.target.id === opponent.board.defend.id} 
+				  socket={socket} card={opponent.board.defend}/>
 
-				<BoardSlot isTarget={me.target && opponent.board.support && me.target.id === opponent.board.support.id} socket={socket} position="Support" side="opponent" card={opponent.board.support}/>
+				<BoardSlot 
+				  style={{top: 120, left: 230, position: 'absolute', width: 90, height: 90}} 
+				  positionImagePath={require('./images/circle.jpg')}
+				  isTarget={me.target && opponent.board.support && me.target.id === opponent.board.support.id} 
+				  socket={socket} card={opponent.board.support}/>
 
-				<BoardSlot socket={socket} position="Attack" side="player" card={me.board.attack}/>
+				<BoardSlot 
+				  style={{top: 250, left: 30, position: 'absolute', width: 90, height: 90}} 
+				  positionImagePath={require('./images/bow.png')} socket={socket} 
+				  card={me.board.attack}/>
 
-				<BoardSlot socket={socket} position="Defend" side="player" card={me.board.defend}/>
+				<BoardSlot 
+  				  style={{top: 250, left: 130, position: 'absolute', width: 90, height: 90}} 
+				  positionImagePath={require('./images/shield.png')} 
+				  socket={socket} card={me.board.defend}/>
 
-				<BoardSlot socket={socket} position="Support" side="player" card={me.board.support}/>
+				<BoardSlot   				  
+				  style={{top: 250, left: 230, position: 'absolute', width: 90, height: 90}} 
+				  positionImagePath={require('./images/circle.jpg')}
+				  socket={socket} card={me.board.support}/>
 
 				<View style={{position: 'absolute', left: 130, top: 340}}> 
 	  				<Image style={{position: 'absolute', width: 100, height: 100}} source={require('./images/crown.png')}/>

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, View, Text, Animated } from 'react-native';
+import { StyleSheet, Text, Animated } from 'react-native';
 
 export default class Alert extends PureComponent {
 	state = {
