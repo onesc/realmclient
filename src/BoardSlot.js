@@ -3,10 +3,6 @@ import { StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-n
 import getImagePath from './imagesrcmap'
 
 export default class BoardSlot extends PureComponent {
-	constructor(props) {
-		super(props);
-	}
-
 	static defaultProps = {
 		side: "opponent",
 		position: "attack",
@@ -15,8 +11,8 @@ export default class BoardSlot extends PureComponent {
 	}
 
 	render() {
-		const {card, side, position, socket, isTarget} = this.props;
-		let containerStyle = { position: 'absolute', width: 90, height:  90};
+		const { card, side, position, socket, isTarget } = this.props;
+		let containerStyle = { position: 'absolute', width: 90, height: 90 };
 		let boardImagePath;
 
 		if (position === "Attack") { containerStyle.left = 30; boardImagePath = require('./images/bow.png')} 

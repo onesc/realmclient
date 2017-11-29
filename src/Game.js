@@ -6,10 +6,6 @@ import BoardSlot from './BoardSlot'
 import Alert from './Alert';
 
 export default class Game extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() { 
 		const { game, socket } = this.props;
 		const nextPhase = () => { socket.emit("nextPhase") }

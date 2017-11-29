@@ -5,14 +5,6 @@ import Card from './Card'
 const { height, width } = Dimensions.get('window');
 
 export default class Hand extends Component {
-	constructor(props) {
-		super(props);
-	}
-
-	static defaultProps = {
-		cards: []
-	}
-
 	render() {
 		const { cards, socket } = this.props;
 
