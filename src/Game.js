@@ -16,6 +16,11 @@ export default class Game extends Component {
 		const me = game.players.find(p => p.id === socket.id)
 		const opponent = game.players.find(p => p.id !== me.id)
 
+		let userAlert = null;
+		if (game.phase === "first_main") {
+			userAlert = game.currentPlayer.id === me.id ? "Your Turn" : "Opponent's Turn";
+		}
+
 		return (
 			<View style={styles.container}>
 				<View style={{position: 'absolute', left: 130, top: 0}}> 
@@ -54,7 +59,7 @@ export default class Game extends Component {
 			
 				<Hand cards={me.hand} socket={socket}/>
 
-				<Alert message={opponent.hp}/>
+				<Alert style={styles.alert} message={userAlert}/>
 			</View>
 		);
 	}
@@ -70,5 +75,6 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		bottom: 200,
 		right: 0
-	}
+	},
+	alert: { position: "absolute", top: 200, width: 300, height: 200 }
 });
