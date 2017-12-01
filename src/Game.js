@@ -4,6 +4,7 @@ import SocketIOClient from 'socket.io-client';
 import Hand from './Hand';
 import BoardSlot from './BoardSlot'
 import Alert from './Alert';
+import Crown from './Crown';
 
 export default class Game extends Component {
 	render() { 
@@ -11,6 +12,7 @@ export default class Game extends Component {
 		const nextPhase = () => { socket.emit("nextPhase") }
 		const me = game.players.find(p => p.id === socket.id)
 		const opponent = game.players.find(p => p.id !== me.id)
+		console.log(game)
 
 		let userAlert = null;
 		if (game.phase === "first_main") {
@@ -19,11 +21,8 @@ export default class Game extends Component {
 
 		return (
 			<View style={styles.container}>
-				<View style={{position: 'absolute', left: 130, top: 0}}> 
-	  				<Image style={{position: 'absolute', width: 100, height: 100}} source={require('./images/crown.png')}/>
- 					<Text style={{position: 'absolute', left: 25, top: 50, color: "red"}}>{opponent.hp}</Text>
-					<Text style={{position: 'absolute', left: 60, top: 50, color: "blue"}}>{opponent.currentMana}</Text>
-				</View>
+				<Crown style={{position: 'absolute', left: 130, top: 0, width: 100, height: 100}}
+				  isTarget={me.target && me.target.id === opponent.id} player={opponent} socket={socket}/>
 
 				<BoardSlot 
 				  style={{top: 120, left: 30, position: 'absolute', width: 90, height: 90}} 
@@ -58,11 +57,8 @@ export default class Game extends Component {
 				  positionImagePath={require('./images/circle.jpg')}
 				  socket={socket} card={me.board.support}/>
 
-				<View style={{position: 'absolute', left: 130, top: 340}}> 
-	  				<Image style={{position: 'absolute', width: 100, height: 100}} source={require('./images/crown.png')}/>
-					<Text style={{position: 'absolute', left: 25, top: 50, color: "red"}} >{me.hp}</Text>
-					<Text style={{position: 'absolute', left: 60, top: 50, color: "blue"}}> {me.currentMana}</Text>
-				</View>
+				<Crown targetable={false} style={{position: 'absolute', left: 130, top: 340, width: 100, height: 100}}
+				  isTarget={me.target && me.target.id === me.id} player={me} socket={socket}/>
 
 				{game.currentPlayer.id === me.id && 
 					<View style={styles.nextPhase}> 

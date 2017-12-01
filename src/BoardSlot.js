@@ -12,7 +12,6 @@ export default class BoardSlot extends PureComponent {
 	render() {
 		const { card, socket, isTarget, positionImagePath } = this.props;
 		const borderStyle = isTarget ? {borderWidth: 2, borderColor: "red" } : {};
-
 		const { style } = StyleSheet.create({style: {...borderStyle, ...this.props.style}});
 
 		if (!card) {
@@ -26,7 +25,7 @@ export default class BoardSlot extends PureComponent {
 		const { name, power, toughness } = card;
 		const cardImagePath = getImagePath(name);
 
-		const onPressButton = () => {
+		const onPressButton = isTarget ? () => {} : () => {
 			socket.emit('setTarget', {id: card.id, type: "Creature"});
 		}
 

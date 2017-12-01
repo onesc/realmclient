@@ -17,6 +17,7 @@ export default class App extends Component {
 
 		this.socket.on('state', game => {
 			this.setState({game: CircularJSON.parse(game), gameStarted: true});
+			console.log(CircularJSON.parse(game))
 		});
 	}
 
