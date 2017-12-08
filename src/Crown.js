@@ -13,9 +13,9 @@ export default class Crown extends PureComponent {
 		const borderStyle = isTarget ? {borderWidth: 2, borderColor: "red" } : {};
 		const { style } = StyleSheet.create({style: {...borderStyle, ...this.props.style }});
 
-		const onPressButton = isTarget && targetable ? () => {} : () => {
+		const onPressButton = !isTarget && targetable ? () => {
 			socket.emit('setTarget', {id: player.id, type: "Player"});
-		}
+		} : () => {} 
 
 		return (
 			<TouchableWithoutFeedback onPress={onPressButton}>

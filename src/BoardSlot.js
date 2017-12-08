@@ -33,8 +33,8 @@ export default class BoardSlot extends PureComponent {
 			<TouchableWithoutFeedback onPress={onPressButton}>
 				<View style={style}>
 					<Image style={{position: 'absolute', width: 80, height: 80}} source={positionImagePath}/>
-					<Image style={{position: 'absolute', width: 60, height: 60}} source={cardImagePath}/>	
-					<Text>{power}</Text><Text>{toughness}</Text>
+					<Image style={{position: 'absolute', width: 60, height: 60, left: 13, top: 8}} source={cardImagePath}/>	
+					<Text style={{position: 'absolute', left: 20, bottom: 0}}>{power}</Text><Text style={{position: 'absolute', bottom: 0, right: 30}}>{toughness}</Text>
 				</View>
 			</TouchableWithoutFeedback>	
 		);

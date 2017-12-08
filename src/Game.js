@@ -69,10 +69,11 @@ export default class Game extends Component {
 						/>
 					</View>
 				}
+
+				<Alert style={styles.alert} message={userAlert}/>
 			
 				<Hand cards={me.hand} socket={socket}/>
 
-				<Alert style={styles.alert} message={userAlert}/>
 			</View>
 		);
 	}
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		width: "100%",
+		height: "100%"
 	},
 	nextPhase: {
 		position: "absolute",
