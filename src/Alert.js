@@ -13,17 +13,19 @@ export default class Alert extends PureComponent {
 		  this.state.fadeAnim,            // The animated value to drive
 		  {
 			toValue: 0,                   // Animate to opacity: 0 (opaque)
-			duration: 4500,              // Make it take a while
+			duration: 3000,              // Make it take a while
 		  }
 		).start(); 
 	}
 
 	render() {
-		if (!this.props.message) { return null}
+		if (!this.props.message) { return null }
+
 		return (
 			<Animated.View               // Special animatable View
 				style={[
 					{opacity: this.state.fadeAnim}, 
+					{ width: 300, flex: -1 },
 					this.props.style
 				]}
 			>

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Text, View } from 'react-native';
 
-export default class Timer extends Component {
+export default class Timer extends PureComponent {
 	state = {
 		time: 999999
 	}

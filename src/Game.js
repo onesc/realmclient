@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableHighlight } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import Hand from './Hand';
 import BoardSlot from './BoardSlot'
@@ -15,9 +15,7 @@ export default class Game extends Component {
 		const opponent = game.players.find(p => p.id !== me.id)
 
 		let userAlert = null;
-		if (game.phase === "first_main") {
-			userAlert = game.currentPlayer.id === me.id ? "Your Turn" : "Opponent's Turn";
-		}
+			userAlert = game.currentPlayer.id === me.id ? "Your " + game.phase : "Opponent's" + game.phase ;
 
 		return (
 			<View style={styles.container}>
@@ -62,18 +60,16 @@ export default class Game extends Component {
 
   				<Timer style={{position: 'absolute', left: 30, top: 380}}
 					active={game.currentPlayer.id === me.id} time={me.timeRemaining} />
-					
+
 				<Crown targetable={false} style={{position: 'absolute', left: 130, top: 340, width: 100, height: 100}}
 				  isTarget={me.target && me.target.id === me.id} player={me} socket={socket}/>
 
 				{game.currentPlayer.id === me.id && 
-					<View style={styles.nextPhase}> 
-						<Button
+						<TouchableHighlight
 						  onPress={nextPhase}
-						  title="Next Phase"
-						  color="#841584"
-						/>
-					</View>
+						  style={styles.nextPhase}>
+							<Text> Next Phase </Text>
+						</TouchableHighlight>
 				}
 
 				<Alert style={styles.alert} message={userAlert}/>
@@ -95,7 +91,10 @@ const styles = StyleSheet.create({
 	nextPhase: {
 		position: "absolute",
 		bottom: 200,
+		height: 50,
+		width: 100,
+		backgroundColor: "pink",
 		right: 0
 	},
-	alert: { position: "absolute", top: 200, width: 300, height: 200 }
+	alert: {position: "absolute", top: 200, }
 });
