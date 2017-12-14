@@ -5,6 +5,7 @@ import Hand from './Hand';
 import BoardSlot from './BoardSlot'
 import Alert from './Alert';
 import Crown from './Crown';
+import Timer from './Timer';
 
 export default class Game extends Component {
 	render() { 
@@ -12,7 +13,6 @@ export default class Game extends Component {
 		const nextPhase = () => { socket.emit("nextPhase") }
 		const me = game.players.find(p => p.id === socket.id)
 		const opponent = game.players.find(p => p.id !== me.id)
-		console.log(game)
 
 		let userAlert = null;
 		if (game.phase === "first_main") {
@@ -21,6 +21,9 @@ export default class Game extends Component {
 
 		return (
 			<View style={styles.container}>
+				<Timer style={{position: 'absolute', left: 30, top: 40}}
+					active={game.currentPlayer.id === opponent.id} time={opponent.timeRemaining} />
+
 				<Crown style={{position: 'absolute', left: 130, top: 0, width: 100, height: 100}}
 				  isTarget={me.target && me.target.id === opponent.id} player={opponent} socket={socket}/>
 
@@ -57,6 +60,9 @@ export default class Game extends Component {
 				  positionImagePath={require('./images/circle.jpg')}
 				  socket={socket} card={me.board.support}/>
 
+  				<Timer style={{position: 'absolute', left: 30, top: 380}}
+					active={game.currentPlayer.id === me.id} time={me.timeRemaining} />
+					
 				<Crown targetable={false} style={{position: 'absolute', left: 130, top: 340, width: 100, height: 100}}
 				  isTarget={me.target && me.target.id === me.id} player={me} socket={socket}/>
 
