@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, Image, TouchableHighlight } from 'react-native';
-import SocketIOClient from 'socket.io-client';
 import Hand from './Hand';
 import BoardSlot from './BoardSlot'
 import Alert from './Alert';
@@ -25,7 +24,12 @@ export default class Game extends Component {
 				<Crown style={{position: 'absolute', left: 130, top: 0, width: 100, height: 100}}
 				  isTarget={me.target && me.target.id === opponent.id} player={opponent} socket={socket}/>
 
-				<BoardSlot 
+				<View style={{position: 'absolute', left: 270, top: 34}}> 
+					<Image style={{width: 50, height: 50}} source={require('./images/cards.png')} />
+					<Text style={{position: 'absolute', left: 22, top: 8, fontSize: 20}}> {opponent.hand.length} </Text>
+				</View>
+
+				<BoardSlot
 				  style={{top: 120, left: 30, position: 'absolute', width: 90, height: 90}} 
 				  positionImagePath={require('./images/bow.png')}
 				  isTarget={me.target && opponent.board.attack && me.target.id === opponent.board.attack.id} 
@@ -74,7 +78,7 @@ export default class Game extends Component {
 
 				<Alert style={styles.alert} message={userAlert}/>
 			
-				<Hand cards={me.hand} socket={socket}/>
+				<Hand manaAvailable={me.currentMana} cards={me.hand} socket={socket}/>
 
 			</View>
 		);

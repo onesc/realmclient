@@ -9,6 +9,15 @@ const getImagePath = (cardName) => {
 	    case "Rabid Troll":
 	    	return require('./images/rabidtroll.jpg');
 	        break;
+      	case "Unsummon":
+	    	return require('./images/unsummon.jpg');
+	        break;
+        case "Soul Drain":
+	    	return require('./images/lifedrain.gif');
+	        break;
+        case "Bone Cannon":
+	    	return require('./images/bonecannon.jpeg');
+	        break;
 	    case "Obese Horror":
 	    	return require('./images/horror.jpg');
 	        break;

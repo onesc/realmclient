@@ -85,6 +85,10 @@ export default class Card extends Component {
 			transform: [{translateX}, {translateY}]
 	    };
 
+	    if (this.props.castable) {
+	    	style.backgroundColor = "#91f3a3";
+	    }
+
 	    const imagePath = getImagePath(name);
 
 		return (

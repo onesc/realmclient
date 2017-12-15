@@ -12,7 +12,7 @@ export default class Hand extends Component {
 	}
 
 	render() {
-		const { cards, socket } = this.props;
+		const { cards, socket, manaAvailable } = this.props;
 
 		const onPress = selectedCard => {
 			if (selectedCard === this.state.inspectedCard) {
@@ -22,7 +22,7 @@ export default class Hand extends Component {
 			}
 		}
 
-		const cardsList = cards.map(card => <Card onPress={onPress} data={card} amount={cards.length} socket={socket}/>);
+		const cardsList = cards.map(card => <Card onPress={onPress} castable={manaAvailable >= card.cost} data={card} amount={cards.length} socket={socket}/>);
 
 		const cardHighlight = this.state.inspectedCard ? 
 			<InspectedCard onPress={() => {this.setState({inspectedCard: null})}} 
