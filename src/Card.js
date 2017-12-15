@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Text, Image, Dimensions, PanResponder, Animated } from 'react-native';
 import getImagePath from './imagesrcmap'
+import { connect } from  'react-redux';
+
 const { height, width } = Dimensions.get('window');
 
-export default class Card extends Component {
+class Card extends Component {
 	constructor(props) {
 		super(props)
     	this.state = { pan: new Animated.ValueXY(), hovered: false, inZone: false, timeWhenPressed: 0 };
@@ -24,7 +26,7 @@ export default class Card extends Component {
 			], {
 				listener: (e, gestureState) => {
 					if (e.timeStamp - this.state.timeWhenPressed > 300) {
-						this.props.onPress(null)
+						this.props.dispatch({ type: 'INSPECT_CARD', card: null })
 					} 
 
 					if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
@@ -41,7 +43,11 @@ export default class Card extends Component {
 
 			onPanResponderRelease: (e, gestureState) => {
 				if (e.timeStamp - this.state.timeWhenPressed < 300) {
-					this.props.onPress(this.props.data)
+					if (this.props.inspectedCard === this.props.data) {
+						this.props.dispatch({ type: 'INSPECT_CARD', card: null })
+					} else {
+						this.props.dispatch({ type: 'INSPECT_CARD', card: this.props.data })
+					}
 				} else {
 					if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
 						this.props.socket.emit('playCard', this.props.data.id, "attack")
@@ -101,3 +107,9 @@ export default class Card extends Component {
 		)
 	}
 }
+
+function mapStateToProps(state) {
+  	return { inspectedCard: state.inspectedCard };
+}
+
+export default connect(mapStateToProps)(Card)

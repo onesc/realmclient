@@ -1,9 +1,9 @@
-export default (state = 0, action) => {
+export default (state = {
+	inspectedCard: null
+}, action) => {
   switch (action.type) {
-    case 'INCREMENT':
-      return state + 1
-    case 'DECREMENT':
-      return state - 1
+    case 'INSPECT_CARD':
+      return {...state, inspectedCard: action.card}
     default:
       return state
   }

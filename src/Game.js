@@ -5,6 +5,9 @@ import BoardSlot from './BoardSlot'
 import Alert from './Alert';
 import Crown from './Crown';
 import Timer from './Timer';
+import InspectedCard from './InspectedCard'
+
+
 
 export default class Game extends Component {
 	render() { 
@@ -79,6 +82,8 @@ export default class Game extends Component {
 				<Alert style={styles.alert} message={userAlert}/>
 			
 				<Hand manaAvailable={me.currentMana} cards={me.hand} socket={socket}/>
+
+				<InspectedCard />
 
 			</View>
 		);
