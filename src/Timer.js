@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Text, View } from 'react-native';
+import { connect } from  'react-redux';
 
-export default class Timer extends PureComponent {
+class Timer extends PureComponent {
 	state = {
 		time: 999999
 	}
@@ -23,6 +24,7 @@ export default class Timer extends PureComponent {
 
 	tick = () => {
 		if (this.props.active) {
+			this.props.dispatch({ type: 'INCREMENT' })
 			this.setState({time: this.state.time - 1000});
 		}
 		console.log("TICKING " + this.state.time);
@@ -45,3 +47,5 @@ export default class Timer extends PureComponent {
 		);
   	}
 }
+
+export default connect()(Timer)

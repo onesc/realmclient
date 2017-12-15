@@ -3,7 +3,6 @@ import { StyleSheet, TouchableWithoutFeedback, Text, Image, View, Dimensions} fr
 import Card from './Card'
 import InspectedCard from './InspectedCard'
 
-
 const { height, width } = Dimensions.get('window');
 
 export default class Hand extends Component {
@@ -22,7 +21,7 @@ export default class Hand extends Component {
 			}
 		}
 
-		const cardsList = cards.map(card => <Card onPress={onPress} castable={manaAvailable >= card.cost} data={card} amount={cards.length} socket={socket}/>);
+		const cardsList = cards.map(card => <Card onPress={onPress} castable={manaAvailable	 >= card.cost} data={card} amount={cards.length} socket={socket}/>);
 
 		const cardHighlight = this.state.inspectedCard ? 
 			<InspectedCard onPress={() => {this.setState({inspectedCard: null})}} 

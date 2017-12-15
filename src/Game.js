@@ -69,11 +69,11 @@ export default class Game extends Component {
 				  isTarget={me.target && me.target.id === me.id} player={me} socket={socket}/>
 
 				{game.currentPlayer.id === me.id && 
-						<TouchableHighlight
-						  onPress={nextPhase}
-						  style={styles.nextPhase}>
-							<Text> Next Phase </Text>
-						</TouchableHighlight>
+					<TouchableHighlight
+					  onPress={nextPhase}
+					  style={styles.nextPhase}>
+						<Text> Next Phase </Text>
+					</TouchableHighlight>
 				}
 
 				<Alert style={styles.alert} message={userAlert}/>
