@@ -5,9 +5,7 @@ import BoardSlot from './BoardSlot'
 import Alert from './Alert';
 import Crown from './Crown';
 import Timer from './Timer';
-import InspectedCard from './InspectedCard'
-
-
+import InspectedCard from './InspectedCard';
 
 export default class Game extends Component {
 	render() { 
@@ -16,8 +14,7 @@ export default class Game extends Component {
 		const me = game.players.find(p => p.id === socket.id)
 		const opponent = game.players.find(p => p.id !== me.id)
 
-		let userAlert = null;
-			userAlert = game.currentPlayer.id === me.id ? "Your " + game.phase : "Opponent's" + game.phase ;
+		let userAlert = game.currentPlayer.id === me.id ? "Your " + game.phase : "Opponent's" + game.phase ;
 
 		return (
 			<View style={styles.container}>
@@ -71,9 +68,9 @@ export default class Game extends Component {
 				<Crown targetable={false} style={{position: 'absolute', left: 130, top: 340, width: 100, height: 100}}
 				  isTarget={me.target && me.target.id === me.id} player={me} socket={socket}/>
 
-				{game.currentPlayer.id === me.id && 
+				{ game.currentPlayer.id === me.id && 
 					<TouchableHighlight
-					  onPress={nextPhase}
+					  onPress={() => { socket.emit("nextPhase") }}
 					  style={styles.nextPhase}>
 						<Text> Next Phase </Text>
 					</TouchableHighlight>

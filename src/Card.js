@@ -49,7 +49,9 @@ class Card extends Component {
 						this.props.dispatch({ type: 'INSPECT_CARD', card: this.props.data })
 					}
 				} else {
-					if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
+					if (this.props.data.targets === 1) {
+						this.props.dispatch({ type: 'PROMPT_FOR_TARGET', promptedSpell: this.props.data })
+					} else if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
 						this.props.socket.emit('playCard', this.props.data.id, "attack")
 					} else if (gestureState.moveX > 150 && gestureState.moveX < 230 && gestureState.moveY > 220 && gestureState.moveY < 320) {
 						this.props.socket.emit('playCard', this.props.data.id, "defend")
@@ -100,7 +102,7 @@ class Card extends Component {
 		return (
   			<Animated.View style={[style]} className="card" {...this._panResponder.panHandlers}>
   				<Text className="name">{name}</Text><Text className="cost">{cost}</Text>
-  				<Image className="image" style={{width: cardWidth, height: cardHeight * 0.4}}  source={imagePath}/>
+  				<Image className="image" style={{width: cardWidth, height: cardHeight * 0.4}} source={imagePath}/>
   				<Text className="type">{type}</Text><Text className="text">{text}</Text>
   				<Text className="power">{power}</Text><Text className="toughness">{toughness}</Text>
         	</Animated.View>

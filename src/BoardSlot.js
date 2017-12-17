@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-native';
 import getImagePath from './imagesrcmap'
+import { connect } from  'react-redux';
 
-export default class BoardSlot extends PureComponent {
+class BoardSlot extends PureComponent {
 	static defaultProps = {
 		card: null,
 		isTarget: false,
@@ -25,12 +26,16 @@ export default class BoardSlot extends PureComponent {
 		const { name, power, toughness } = card;
 		const cardImagePath = getImagePath(name);
 
-		const onPressButton = isTarget ? () => {} : () => {
+		let onPress = isTarget ? () => {} : () => {
 			socket.emit('setTarget', {id: card.id, type: "Creature"});
 		}
 
+		if (this.props.promptingForTarget) {
+			onPress = () => { this.props.dispatch({ type: 'CAST_AT_TARGET', target: [card], socket: socket }) }
+		}
+
 		return (
-			<TouchableWithoutFeedback onPress={onPressButton}>
+			<TouchableWithoutFeedback onPress={onPress}>
 				<View style={style}>
 					<Image style={{position: 'absolute', width: 80, height: 80}} source={positionImagePath}/>
 					<Image style={{position: 'absolute', width: 60, height: 60, left: 13, top: 8}} source={cardImagePath}/>	
@@ -40,3 +45,9 @@ export default class BoardSlot extends PureComponent {
 		);
   	}
 }
+
+function mapStateToProps(state) {
+  	return { promptingForTarget: state.promptingForTarget };
+}
+
+export default connect(mapStateToProps)(BoardSlot)
