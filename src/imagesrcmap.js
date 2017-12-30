@@ -15,6 +15,9 @@ const getImagePath = (cardName) => {
         case "Soul Drain":
 	    	return require('./images/lifedrain.gif');
 	        break;
+        case "Warbone Crusader":
+	    	return require('./images/warbonecrusader.jpg');
+	        break;
         case "Bone Cannon":
 	    	return require('./images/bonecannon.jpeg');
 	        break;

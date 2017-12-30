@@ -1,18 +1,18 @@
 export default (state = {
 	inspectedCard: null,
 	spell: null,
-	promptingForTarget: false
+	promptingForTarget: false,
+    socket: {},
+    game: { players: [] }
 }, action) => {
-  switch (action.type) {
+    switch (action.type) {
     case 'INSPECT_CARD':
       	return {...state, inspectedCard: action.card}
-   	case 'PROMPT_FOR_TARGET':
-      	return {...state, promptingForTarget: true, promptedSpell: action.promptedSpell}
-  	case 'CAST_AT_TARGET':
-  		console.log("tryna cast ", state)
-  		action.socket.emit('playCard', state.promptedSpell.id, null, action.target)
-      	return {...state, promptingForTarget: false, promptedSpell: null}
+    case 'SET_SOCKET': 
+        return {...state, socket: action.socket}
+    case 'SET_GAME_STATE': 
+        return {...state, game: action.game}
     default:
       	return state
-  }
+    }
 }

@@ -8,7 +8,7 @@ export default class Hand extends Component {
 	render() {
 		const { cards, socket, manaAvailable } = this.props;
 		const cardsList = cards.map(card => 
-			<Card castable={manaAvailable >= card.cost} data={card} amount={cards.length} socket={socket}/>);
+			<Card castable={manaAvailable >= card.cost} data={card} amount={cards.length} />);
 
 		return (
 			<View style={{position: 'absolute', top: 0, left: 0}}>

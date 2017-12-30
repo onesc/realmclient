@@ -1,14 +1,20 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Text, Image, Dimensions, PanResponder, Animated } from 'react-native';
 import getImagePath from './imagesrcmap'
 import { connect } from  'react-redux';
 
 const { height, width } = Dimensions.get('window');
 
-class Card extends Component {
+class Card extends PureComponent {
 	constructor(props) {
 		super(props)
-    	this.state = { pan: new Animated.ValueXY(), hovered: false, inZone: false, timeWhenPressed: 0 };
+    	this.state = { pan: new Animated.ValueXY(),
+    		fingerPositionOnTouch: {x: 0, y: 0},
+    		dragged: false, 
+    		inZone: false, 
+    		timeWhenPressed: 0, 
+    		targeting: null 
+    	};
 	}
 
 	componentWillMount = () => {
@@ -18,7 +24,13 @@ class Card extends Component {
 
 			onPanResponderGrant: (e, gestureState) => {
 				this.state.pan.setValue({x: 0, y: 0});
-				this.setState({timeWhenPressed: e.timeStamp});
+				this.state.pan.setOffset({x: 100, y: 100});
+				console.log(gestureState)
+
+				this.setState({
+					timeWhenPressed: e.timeStamp, 
+					fingerPositionOnTouch: {x: gestureState.x0, y: gestureState.y0}
+				});
 			},
 
 			onPanResponderMove: Animated.event([
@@ -29,14 +41,24 @@ class Card extends Component {
 						this.props.dispatch({ type: 'INSPECT_CARD', card: null })
 					} 
 
+					const { myBoard, opponentBoard } = this.props
+
+					this.setState({dragged: true});
+
 					if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
-						this.setState({inZone: true});
+						this.setState({inZone: "attack", targeting: myBoard.attack});
 					} else if (gestureState.moveX > 150 && gestureState.moveX < 230 && gestureState.moveY > 220 && gestureState.moveY < 320) {
-						this.setState({inZone: true});
+						this.setState({inZone: "defend", targeting: myBoard.defend});
 					} else if (gestureState.moveX > 260 && gestureState.moveX < 330 && gestureState.moveY > 220 && gestureState.moveY < 320) {
-						this.setState({inZone: true});
+						this.setState({inZone: "support", targeting: myBoard.support});
+					} else if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 70 && gestureState.moveY < 170) {
+						this.setState({inZone: "attack", targeting: opponentBoard.attack});
+					} else if (gestureState.moveX > 150 && gestureState.moveX < 230 && gestureState.moveY > 70 && gestureState.moveY < 170) {
+						this.setState({inZone: "defend", targeting: opponentBoard.defend});
+					} else if (gestureState.moveX > 260 && gestureState.moveX < 330 && gestureState.moveY > 70 && gestureState.moveY < 170) {
+						this.setState({inZone: "support", targeting: opponentBoard.support});
 					} else {
-						this.setState({inZone: false});
+						this.setState({inZone: false, targeting: null});
 					}
 				}
 			}),
@@ -49,35 +71,29 @@ class Card extends Component {
 						this.props.dispatch({ type: 'INSPECT_CARD', card: this.props.data })
 					}
 				} else {
-					if (this.props.data.targets === 1) {
-						this.props.dispatch({ type: 'PROMPT_FOR_TARGET', promptedSpell: this.props.data })
-					} else if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
-						this.props.socket.emit('playCard', this.props.data.id, "attack")
-					} else if (gestureState.moveX > 150 && gestureState.moveX < 230 && gestureState.moveY > 220 && gestureState.moveY < 320) {
-						this.props.socket.emit('playCard', this.props.data.id, "defend")
-					} else if (gestureState.moveX > 260 && gestureState.moveX < 330 && gestureState.moveY > 220 && gestureState.moveY < 320) {
-						this.props.socket.emit('playCard', this.props.data.id, "support")
-					} 
-				};
+					if (this.props.data.type === "Creature" && this.state.inZone) {
+						this.props.socket.emit('playCard', this.props.data.id, this.state.inZone)						
+					} else if (this.props.data.type === "Spell" && this.state.inZone) {
+						this.props.socket.emit('playCard', this.props.data.id, null, [this.state.targeting])						
+					}
+				}
 
 				this.state.pan.setValue({x: 0, y: 0});
-				this.setState({hovered: false, inZone: false});		
+				this.state.pan.setOffset({x: 0, y: 	0});
+				this.setState({dragged: false, inZone: false});		
 			}
 		})
 	}
 
 	render() {
-		const { name, cost, imageSrc, type, text, power, toughness} = this.props.data;
-	    const { pan, hovered, inZone } = this.state;
+		console.log("Rendering card! ", this.props.data.name)
+
+		const { name, cost, imageSrc, type, text, power, toughness, targets } = this.props.data;
+	    const { pan, dragged, inZone } = this.state;
 	    const [translateX, translateY] = [pan.x, pan.y];
 
 	    let cardWidth = width / this.props.amount;
 	    let cardHeight = 200
-
-	    if (hovered) { 
-	    	cardWidth = 100; 
-	    	cardHeight = cardHeight * 1.2 
-	    }
 
 	    if (inZone) { 
 	    	cardWidth = 50;
@@ -97,21 +113,35 @@ class Card extends Component {
 	    	style.backgroundColor = "#91f3a3";
 	    }
 
-	    const imagePath = getImagePath(name);
+	   	const imagePath = getImagePath(name);
+
+	   	if (dragged && targets === 1) {
+	   		return (
+	   			<Animated.View style={{
+	   				height: 100,
+	   				width: 100,
+	   				transform: [{translateX}, {translateY}]
+	   			}} {...this._panResponder.panHandlers}>
+	   				<Image style={{width: cardWidth, height: cardHeight * 0.4}} source={require('./images/target.png')} />
+	   			</Animated.View>
+	   		)
+	    }
 
 		return (
-  			<Animated.View style={[style]} className="card" {...this._panResponder.panHandlers}>
-  				<Text className="name">{name}</Text><Text className="cost">{cost}</Text>
-  				<Image className="image" style={{width: cardWidth, height: cardHeight * 0.4}} source={imagePath}/>
-  				<Text className="type">{type}</Text><Text className="text">{text}</Text>
-  				<Text className="power">{power}</Text><Text className="toughness">{toughness}</Text>
+  			<Animated.View style={[style]} {...this._panResponder.panHandlers}>
+  				<Text>{name}</Text><Text>{cost}</Text>
+				<Image style={{width: cardWidth, height: cardHeight * 0.4}} source={imagePath}/>
+				<Text>{type}</Text><Text>{text}</Text>
+				<Text>{power}</Text><Text>{toughness}</Text>
         	</Animated.View>
 		)
 	}
 }
 
 function mapStateToProps(state) {
-  	return { inspectedCard: state.inspectedCard };
+	const me = state.game.players.find(p => p.id === state.socket.id);
+	const opponent = state.game.players.find(p => p.id === state.socket.id);
+  	return { myBoard: me.board , opponentBoard: opponent.board, socket: state.socket, inspectedCard: state.inspectedCard };
 }
 
 export default connect(mapStateToProps)(Card)
