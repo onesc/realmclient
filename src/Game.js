@@ -23,6 +23,7 @@ class Game extends Component {
 		const opponent = game.players.find(p => p.id !== me.id)
 
 		let userAlert = game.currentPlayer.id === me.id ? "Your " + game.phase : "Opponent's" + game.phase ;
+		const nextPhaseTest = game.phase === "first_main" ? "Go to Combat" : "End Turn";
 
 		return (
 			<View style={styles.container}>
@@ -38,7 +39,7 @@ class Game extends Component {
 					<TouchableHighlight
 					  onPress={() => { socket.emit("nextPhase") }}
 					  style={styles.nextPhase}>
-						<Text> Next Phase </Text>
+						<Text> {nextPhaseTest} </Text>
 					</TouchableHighlight>
 				}
 
