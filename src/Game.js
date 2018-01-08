@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		height: "100%"
 	},
-		nextPhase: {
+	nextPhase: {
 		position: "absolute",
 		bottom: 200,
 		height: 50,

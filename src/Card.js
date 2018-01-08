@@ -24,12 +24,17 @@ class Card extends PureComponent {
 
 			onPanResponderGrant: (e, gestureState) => {
 				this.state.pan.setValue({x: 0, y: 0});
-				this.state.pan.setOffset({x: 100, y: 100});
+
+				const yOffset = height - 165 - gestureState.y0;
+							console.log("yOffset: ", yOffset)
+
+				this.state.pan.setOffset({x: 0, y: -yOffset});
 				console.log(gestureState)
 
 				this.setState({
 					timeWhenPressed: e.timeStamp, 
-					fingerPositionOnTouch: {x: gestureState.x0, y: gestureState.y0}
+					fingerPositionOnTouch: {x: gestureState.x0, y: gestureState.y0},
+					dragged: true
 				});
 			},
 
@@ -43,7 +48,6 @@ class Card extends PureComponent {
 
 					const { myBoard, opponentBoard } = this.props
 
-					this.setState({dragged: true});
 
 					if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
 						this.setState({inZone: "attack", targeting: myBoard.attack});
@@ -74,6 +78,7 @@ class Card extends PureComponent {
 					if (this.props.data.type === "Creature" && this.state.inZone) {
 						this.props.socket.emit('playCard', this.props.data.id, this.state.inZone)						
 					} else if (this.props.data.type === "Spell" && this.state.inZone) {
+						console.log("playing ", this.props.data.id, " at ", this.state.targeting)
 						this.props.socket.emit('playCard', this.props.data.id, null, [this.state.targeting])						
 					}
 				}
@@ -93,7 +98,8 @@ class Card extends PureComponent {
 	    const [translateX, translateY] = [pan.x, pan.y];
 
 	    let cardWidth = width / this.props.amount;
-	    let cardHeight = 200
+		let cardHeight = 200;
+	    
 
 	    if (inZone) { 
 	    	cardWidth = 50;
@@ -113,16 +119,18 @@ class Card extends PureComponent {
 	    	style.backgroundColor = "#91f3a3";
 	    }
 
-	   	const imagePath = getImagePath(name);
+	   	let imagePath = getImagePath(name);
 
-	   	if (dragged && targets === 1) {
+	   	if (dragged) {
+   			if (targets === 1) { imagePath = require('./images/target.png') };
+
 	   		return (
-	   			<Animated.View style={{
+ 	   			<Animated.View style={{
 	   				height: 100,
 	   				width: 100,
 	   				transform: [{translateX}, {translateY}]
 	   			}} {...this._panResponder.panHandlers}>
-	   				<Image style={{width: cardWidth, height: cardHeight * 0.4}} source={require('./images/target.png')} />
+	   				<Image style={{width: cardWidth, height: cardHeight * 0.4}} source={imagePath	} />
 	   			</Animated.View>
 	   		)
 	    }
@@ -140,7 +148,7 @@ class Card extends PureComponent {
 
 function mapStateToProps(state) {
 	const me = state.game.players.find(p => p.id === state.socket.id);
-	const opponent = state.game.players.find(p => p.id === state.socket.id);
+	const opponent = state.game.players.find(p => p.id !== state.socket.id);
   	return { myBoard: me.board , opponentBoard: opponent.board, socket: state.socket, inspectedCard: state.inspectedCard };
 }
 

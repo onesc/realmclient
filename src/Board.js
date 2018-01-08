@@ -62,7 +62,6 @@ export default class Board extends Component {
 
 				<Crown targetable={false} style={{position: 'absolute', left: 130, top: 340, width: 100, height: 100}}
 				  isTarget={me.target && me.target.id === me.id} player={me} socket={socket}/>
-
 			</View>
 		);
   	}

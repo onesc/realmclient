@@ -30,10 +30,6 @@ class BoardSlot extends PureComponent {
 			socket.emit('setTarget', {id: card.id, type: "Creature"});
 		}
 
-		// if (this.props.promptingForTarget) {
-		// 	onPress = () => { this.props.dispatch({ type: 'CAST_AT_TARGET', target: [card], socket: socket }) }
-		// }
-
 		return (
 			<TouchableWithoutFeedback onPress={onPress}>
 				<View style={style}>
@@ -47,7 +43,7 @@ class BoardSlot extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  	return { socket: state.socket, promptingForTarget: state.promptingForTarget };
+  	return { socket: state.socket };
 }
 
 export default connect(mapStateToProps)(BoardSlot)

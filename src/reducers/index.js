@@ -1,7 +1,5 @@
 export default (state = {
 	inspectedCard: null,
-	spell: null,
-	promptingForTarget: false,
     socket: {},
     game: { players: [] }
 }, action) => {
