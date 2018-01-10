@@ -30,8 +30,14 @@ class BoardSlot extends PureComponent {
 			socket.emit('setTarget', {id: card.id, type: "Creature"});
 		}
 
+		let onLongPress = () => {
+			if (this.props.card !== null) { 
+				this.props.dispatch({ type: 'INSPECT_CARD', card: this.props.card }) 
+			}
+		}
+
 		return (
-			<TouchableWithoutFeedback onPress={onPress}>
+			<TouchableWithoutFeedback onPress={onPress} onLongPress={onLongPress}>
 				<View style={style}>
 					<Image style={{position: 'absolute', width: 80, height: 80}} source={positionImagePath}/>
 					<Image style={{position: 'absolute', width: 60, height: 60, left: 13, top: 8}} source={cardImagePath}/>	

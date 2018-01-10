@@ -23,6 +23,7 @@ export default class Alert extends PureComponent {
 
 		return (
 			<Animated.View               // Special animatable View
+				pointerEvents="none"
 				style={[
 					{opacity: this.state.fadeAnim}, 
 					{ width: 300, flex: -1 },
