@@ -6,6 +6,8 @@ import { createStore } from 'redux'
 import reducer from './reducers'
 import { Provider } from 'react-redux'
 
+Text.defaultProps.allowFontScaling=false
+
 const store = createStore(reducer)
 const socket = SocketIOClient('https://rlmqst.com');
 store.dispatch({ type: 'SET_SOCKET', socket: socket })

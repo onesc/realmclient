@@ -13,7 +13,8 @@ class Card extends PureComponent {
     		dragged: false, 
     		inZone: false, 
     		timeWhenPressed: 0, 
-    		targeting: null 
+    		targeting: null,
+    		inBoard: false
     	};
 	}
 
@@ -46,8 +47,13 @@ class Card extends PureComponent {
 						this.props.dispatch({ type: 'INSPECT_CARD', card: null })
 					} 
 
-					const { myBoard, opponentBoard } = this.props
+					if (gestureState.moveY < 400) {
+						this.setState({inBoard: true});
+					} else {
+						this.setState({inBoard: false});
+					}
 
+					const { myBoard, opponentBoard } = this.props
 
 					if (gestureState.moveX > 32 && gestureState.moveX < 116 && gestureState.moveY > 220 && gestureState.moveY < 320) {
 						this.setState({inZone: "attack", targeting: myBoard.attack});
@@ -77,15 +83,16 @@ class Card extends PureComponent {
 				} else {
 					if (this.props.data.type === "Creature" && this.state.inZone) {
 						this.props.socket.emit('playCard', this.props.data.id, this.state.inZone)						
+					} else if (this.props.data.type === "Spell" && this.props.data.targets === 0 && this.state.inBoard) {
+						this.props.socket.emit('playCard', this.props.data.id)						
 					} else if (this.props.data.type === "Spell" && this.state.inZone) {
-						console.log("playing ", this.props.data.id, " at ", this.state.targeting)
 						this.props.socket.emit('playCard', this.props.data.id, null, [this.state.targeting])						
 					}
 				}
 
 				this.state.pan.setValue({x: 0, y: 0});
 				this.state.pan.setOffset({x: 0, y: 	0});
-				this.setState({dragged: false, inZone: false});		
+				this.setState({dragged: false, inZone: false, inBoard: false});		
 			}
 		})
 	}
@@ -94,14 +101,16 @@ class Card extends PureComponent {
 		console.log("Rendering card! ", this.props.data.name)
 
 		const { name, cost, imageSrc, type, text, power, toughness, targets } = this.props.data;
-	    const { pan, dragged, inZone } = this.state;
+	    const { pan, dragged, inZone, inBoard } = this.state;
 	    const [translateX, translateY] = [pan.x, pan.y];
 
 	    let cardWidth = width / this.props.amount;
 		let cardHeight = 200;
 	    
-
-	    if (inZone) { 
+		if (targets === 0 && type === "Spell" && inBoard) {
+			cardWidth = 150;
+	    	cardHeight = 300;
+		} else if (inZone) { 
 	    	cardWidth = 50;
 	    	cardHeight = 60
 	    }
